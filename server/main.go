@@ -23,6 +23,12 @@ func main() {
 	config.AllowAllOrigins = true
 	r.Use(cors.New(config))
 
+	r.GET("/", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, gin.H{
+			"message": "ping!",
+		})
+	})
+
 	r.POST(":room/send", func(ctx *gin.Context) {
 		room := ctx.Param("room")
 
@@ -67,5 +73,5 @@ func main() {
 			}
 		}
 	})
-	r.Run("localhost:8080")
+	r.Run("localhost:4750")
 }

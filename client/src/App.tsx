@@ -1,4 +1,5 @@
-import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import { FormEvent, useCallback, useEffect, useRef } from "react";
+import { useCachedState } from "./useCachedState";
 
 interface Info {
   name: string;
@@ -11,7 +12,7 @@ interface Dto {
   timestamp: number;
 }
 
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 function Welcome({ onSubmit }: { onSubmit(values: Info): void }) {
   const onSubmitForm = (event: FormEvent<HTMLFormElement>) => {
@@ -66,7 +67,7 @@ function Welcome({ onSubmit }: { onSubmit(values: Info): void }) {
 function Room({ name, room }: Info) {
   const divRef = useRef<HTMLDivElement>(null);
 
-  const [messages, setMessages] = useState<Array<Dto>>([]);
+  const [messages, setMessages] = useCachedState<Array<Dto>>("messages", []);
 
   const onSubmitForm = useCallback(
     async (event: FormEvent<HTMLFormElement>) => {
@@ -186,7 +187,7 @@ function Room({ name, room }: Info) {
 }
 
 function App() {
-  const [info, setInfo] = useState<Info>();
+  const [info, setInfo] = useCachedState<Info>("user-info");
 
   return (
     <div className="p-4 min-h-dvh bg-slate-50">
